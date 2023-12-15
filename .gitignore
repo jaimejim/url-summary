@@ -1,0 +1,33 @@
+# .gitignore
+
+# Mac system files
+.DS_Store
+
+# Python cache files and directories
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Jupyter Notebook files
+.ipynb_checkpoints/
+
+# Environment and install files
+.env
+env/
+venv/
+*.egg-info/
+dist/
+build/
+*.pyz
+*.egg
+
+# IDE files
+.idea/
+.vscode/
+
+# Log files
+*.log
+
+# Database files
+*.sqlite
