@@ -20,7 +20,11 @@ def print_with_timestamp(message, color=None):
 def summarize_url(url, color):
     print_with_timestamp(f"Processing URL: {url}", color)
     print_with_timestamp("Sending request to URL...", color)
-    response = requests.get(url)
+    try:
+        response = requests.get(url)
+    except requests.exceptions.SSLError:
+        print_with_timestamp("SSL Verification failed. Retrying without SSL Verification...", 'yellow')
+        response = requests.get(url, verify=False)
     print_with_timestamp("Response received. Parsing HTML...", color)
     soup = BeautifulSoup(response.text, 'html.parser')
     text = soup.get_text()
@@ -41,7 +45,7 @@ def summarize_url(url, color):
             response = client.chat.completions.create(
                 model="gpt-4-1106-preview",
                 messages=[
-                    {"role": "system", "content": f"Generate a markdown formatted summary of the main aspects of this website, with features and useful information. Include a title in '##' format and embed links where necessary. The output should be a couple of paragraph of text without subsections, but include embedded links where necessary: {chunk}"}
+                    {"role": "system", "content": f"Generate a markdown formatted summary of the main aspects of this website, with features and useful information. Include a title in '##' format and embed links where necessary. The output should be a maximum 2 paragraphs of text without subsections, but including embedded links where necessary: {chunk}"}
                 ],
                 temperature=1,
                 max_tokens=2000,
@@ -66,7 +70,7 @@ def main(input_file, output_file):
         color = next(colors)
         summary = summarize_url(url, color)
         with open(output_file, 'a') as f:
-            f.write(f'\n\n{summary}\n- {url}\n')
+            f.write(f'\n{summary}- {url}\n')
         print_with_timestamp(f"Appended summary to {output_file}", 'green')
 
 if __name__ == '__main__':

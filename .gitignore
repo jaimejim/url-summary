@@ -31,3 +31,7 @@ build/
 
 # Database files
 *.sqlite
+
+# Code files
+urls.txt
+output.md
