@@ -126,7 +126,7 @@ def main(input_file, output_file, model):
     for url in urls:
         color = next(colors)
         if model == 'openai':
-            summary = summarize_url_with_openai(url, color)
+            summary = summarize_url_with_openai(url, color, model)
         else:
             summary = summarize_url_with_ollama(url, color, model)
         with open(output_file, 'a') as f:
